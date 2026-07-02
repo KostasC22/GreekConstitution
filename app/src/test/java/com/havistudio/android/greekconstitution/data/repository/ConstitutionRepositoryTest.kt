@@ -98,11 +98,34 @@ class ConstitutionRepositoryTest {
 
     @Test
     fun `removeBookmark delegates to DAO`() = runTest {
-        coEvery { bookmarkDao.removeByArticle(42) } returns Unit
+        coEvery { bookmarkDao.removeByArticle(42) } returns 1
 
         repository.removeBookmark(42)
 
         coVerify { bookmarkDao.removeByArticle(42) }
+    }
+
+    @Test
+    fun `toggleBookmark on bookmarked article removes it without re-adding`() = runTest {
+        // DAO reports one row deleted — the article was bookmarked.
+        coEvery { bookmarkDao.removeByArticle(42) } returns 1
+
+        repository.toggleBookmark(42)
+
+        coVerify(exactly = 1) { bookmarkDao.removeByArticle(42) }
+        coVerify(exactly = 0) { bookmarkDao.add(any()) }
+    }
+
+    @Test
+    fun `toggleBookmark on non-bookmarked article adds it`() = runTest {
+        // DAO reports zero rows deleted — the article was not bookmarked.
+        coEvery { bookmarkDao.removeByArticle(42) } returns 0
+        val bookmarkSlot = slot<Bookmark>()
+        coEvery { bookmarkDao.add(capture(bookmarkSlot)) } returns 1L
+
+        repository.toggleBookmark(42)
+
+        assertEquals(42, bookmarkSlot.captured.articleId)
     }
 
     @Test

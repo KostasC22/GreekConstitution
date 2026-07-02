@@ -1,6 +1,7 @@
 package com.havistudio.android.greekconstitution.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +32,12 @@ fun AppNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = Modifier.padding(padding),
+        // Consume the insets the outer Scaffold's padding already covers, or
+        // every screen's own Scaffold/TopAppBar pads the status bar a second
+        // time (double gap — glaring on tall-status-bar devices like Pixel 10).
+        modifier = Modifier
+            .padding(padding)
+            .consumeWindowInsets(padding),
     ) {
         composable(Screen.Disclaimer.route) {
             DisclaimerScreen(

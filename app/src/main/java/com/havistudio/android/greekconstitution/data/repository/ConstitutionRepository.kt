@@ -88,11 +88,9 @@ class ConstitutionRepository(
 
     suspend fun toggleBookmark(articleId: Int) {
         val removed = bookmarkDao.removeByArticle(articleId)
-        // removeByArticle returns Unit; check via a fresh query would be
-        // wasteful. Instead, attempt insert and rely on IGNORE for dupes.
-        // Since we always remove first, insert will succeed if the article
-        // was not bookmarked before, and effectively toggle.
-        bookmarkDao.add(Bookmark(articleId = articleId, createdAt = System.currentTimeMillis()))
+        if (removed == 0) {
+            bookmarkDao.add(Bookmark(articleId = articleId, createdAt = System.currentTimeMillis()))
+        }
     }
 
     suspend fun addBookmark(articleId: Int) {

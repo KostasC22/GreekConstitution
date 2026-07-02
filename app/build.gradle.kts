@@ -4,6 +4,13 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// Room exports its schema JSON here on each build (see `room.schemaLocation`
+// below). Commit these files: they are the history MigrationTestHelper needs
+// to test future migrations.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
     namespace = "com.havistudio.android.greekconstitution"
     compileSdk {
@@ -29,7 +36,8 @@ android {
             enableAndroidTestCoverage = true
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
