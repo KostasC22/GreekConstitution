@@ -98,11 +98,34 @@ class ConstitutionRepositoryTest {
 
     @Test
     fun `removeBookmark delegates to DAO`() = runTest {
-        coEvery { bookmarkDao.removeByArticle(42) } returns Unit
+        coEvery { bookmarkDao.removeByArticle(42) } returns 1
 
         repository.removeBookmark(42)
 
         coVerify { bookmarkDao.removeByArticle(42) }
+    }
+
+    @Test
+    fun `toggleBookmark on bookmarked article removes it without re-adding`() = runTest {
+        // DAO reports one row deleted — the article was bookmarked.
+        coEvery { bookmarkDao.removeByArticle(42) } returns 1
+
+        repository.toggleBookmark(42)
+
+        coVerify(exactly = 1) { bookmarkDao.removeByArticle(42) }
+        coVerify(exactly = 0) { bookmarkDao.add(any()) }
+    }
+
+    @Test
+    fun `toggleBookmark on non-bookmarked article adds it`() = runTest {
+        // DAO reports zero rows deleted — the article was not bookmarked.
+        coEvery { bookmarkDao.removeByArticle(42) } returns 0
+        val bookmarkSlot = slot<Bookmark>()
+        coEvery { bookmarkDao.add(capture(bookmarkSlot)) } returns 1L
+
+        repository.toggleBookmark(42)
+
+        assertEquals(42, bookmarkSlot.captured.articleId)
     }
 
     @Test
@@ -173,6 +196,76 @@ class ConstitutionRepositoryTest {
         every { noteDao.observeNotesForArticle(1) } returns flowOf(emptyList())
         val flow = repository.observeNotesForArticle(1)
         assertEquals(noteDao.observeNotesForArticle(1), flow)
+    }
+
+    @Test
+    fun `structure flows delegate to constitutionDao`() {
+        every { constitutionDao.observeAllSections() } returns flowOf(emptyList())
+        every { constitutionDao.observeAllChapters() } returns flowOf(emptyList())
+        every { constitutionDao.observeSectionsInPart(1) } returns flowOf(emptyList())
+        every { constitutionDao.observeChaptersInSection(1) } returns flowOf(emptyList())
+        every { constitutionDao.observePart(1) } returns flowOf(null)
+
+        assertEquals(constitutionDao.observeAllSections(), repository.observeAllSections())
+        assertEquals(constitutionDao.observeAllChapters(), repository.observeAllChapters())
+        assertEquals(constitutionDao.observeSectionsInPart(1), repository.observeSectionsInPart(1))
+        assertEquals(
+            constitutionDao.observeChaptersInSection(1),
+            repository.observeChaptersInSection(1),
+        )
+        assertEquals(constitutionDao.observePart(1), repository.observePart(1))
+    }
+
+    @Test
+    fun `article flows delegate to constitutionDao`() {
+        every { constitutionDao.observeArticles() } returns flowOf(emptyList())
+        every { constitutionDao.observeArticlesInPart(1) } returns flowOf(emptyList())
+        every { constitutionDao.observeArticlesInSection(1) } returns flowOf(emptyList())
+        every { constitutionDao.observeArticlesInChapter(1) } returns flowOf(emptyList())
+        every { constitutionDao.observeArticle(1) } returns flowOf(null)
+        every { constitutionDao.observeNextArticle(1) } returns flowOf(null)
+        every { constitutionDao.observePreviousArticle(1) } returns flowOf(null)
+
+        assertEquals(constitutionDao.observeArticles(), repository.observeArticles())
+        assertEquals(constitutionDao.observeArticlesInPart(1), repository.observeArticlesInPart(1))
+        assertEquals(
+            constitutionDao.observeArticlesInSection(1),
+            repository.observeArticlesInSection(1),
+        )
+        assertEquals(
+            constitutionDao.observeArticlesInChapter(1),
+            repository.observeArticlesInChapter(1),
+        )
+        assertEquals(constitutionDao.observeArticle(1), repository.observeArticle(1))
+        assertEquals(constitutionDao.observeNextArticle(1), repository.observeNextArticle(1))
+        assertEquals(
+            constitutionDao.observePreviousArticle(1),
+            repository.observePreviousArticle(1),
+        )
+    }
+
+    @Test
+    fun `article detail flows delegate to constitutionDao`() {
+        every { constitutionDao.observeParagraphs(1) } returns flowOf(emptyList())
+        every { constitutionDao.observeInterpretiveClauses(1) } returns flowOf(emptyList())
+
+        assertEquals(constitutionDao.observeParagraphs(1), repository.observeParagraphs(1))
+        assertEquals(
+            constitutionDao.observeInterpretiveClauses(1),
+            repository.observeInterpretiveClauses(1),
+        )
+    }
+
+    @Test
+    fun `observeIsBookmarked delegates to bookmarkDao`() {
+        every { bookmarkDao.observeIsBookmarked(1) } returns flowOf(false)
+        assertEquals(bookmarkDao.observeIsBookmarked(1), repository.observeIsBookmarked(1))
+    }
+
+    @Test
+    fun `observeAllNotes delegates to noteDao`() {
+        every { noteDao.observeAllNotes() } returns flowOf(emptyList())
+        assertEquals(noteDao.observeAllNotes(), repository.observeAllNotes())
     }
 
     // ---- Latest-note projection + bookmarks-with-notes --------------------

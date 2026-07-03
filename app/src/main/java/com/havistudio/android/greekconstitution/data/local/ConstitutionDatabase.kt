@@ -34,7 +34,10 @@ import com.havistudio.android.greekconstitution.data.local.entity.Section
         Note::class,
     ],
     version = 2,
-    exportSchema = false,
+    // Schema JSON lands in app/schemas (KSP `room.schemaLocation`). v1 predates
+    // the export, so only v2+ exist; future migrations get MigrationTestHelper
+    // coverage from here on.
+    exportSchema = true,
 )
 @TypeConverters(Converters::class)
 abstract class ConstitutionDatabase : RoomDatabase() {

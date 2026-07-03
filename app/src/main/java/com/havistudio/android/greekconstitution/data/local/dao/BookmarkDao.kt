@@ -14,8 +14,9 @@ interface BookmarkDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun add(bookmark: Bookmark): Long
 
+    /** @return number of rows deleted (0 when the article was not bookmarked). */
     @Query("DELETE FROM bookmarks WHERE articleId = :articleId")
-    suspend fun removeByArticle(articleId: Int)
+    suspend fun removeByArticle(articleId: Int): Int
 
     @Query("SELECT EXISTS(SELECT 1 FROM bookmarks WHERE articleId = :articleId)")
     fun observeIsBookmarked(articleId: Int): Flow<Boolean>
