@@ -63,9 +63,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.havistudio.android.greekconstitution.data.local.FontSize
 import com.havistudio.android.greekconstitution.data.local.PreferencesManager
@@ -73,6 +70,7 @@ import com.havistudio.android.greekconstitution.data.local.ThemePref
 import com.havistudio.android.greekconstitution.data.local.UiLanguage
 import com.havistudio.android.greekconstitution.ui.strings.AppStrings
 import com.havistudio.android.greekconstitution.ui.strings.LocalAppStrings
+import com.havistudio.android.greekconstitution.util.openCustomTab
 
 private const val SAMPLE_TEXT =
     "Όλοι όσοι βρίσκονται στην Ελληνική Επικράτεια απολαμβάνουν την απόλυτη " +
@@ -229,21 +227,6 @@ fun SettingsScreen(
             },
         )
     }
-}
-
-private fun openCustomTab(
-    context: android.content.Context,
-    url: String,
-    toolbarColorArgb: Int,
-) {
-    val colorParams = CustomTabColorSchemeParams.Builder()
-        .setToolbarColor(toolbarColorArgb)
-        .build()
-    val intent = CustomTabsIntent.Builder()
-        .setDefaultColorSchemeParams(colorParams)
-        .setShowTitle(true)
-        .build()
-    intent.launchUrl(context, url.toUri())
 }
 
 @Composable
