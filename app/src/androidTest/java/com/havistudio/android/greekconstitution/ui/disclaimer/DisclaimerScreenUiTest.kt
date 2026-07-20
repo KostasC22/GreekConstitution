@@ -2,6 +2,7 @@ package com.havistudio.android.greekconstitution.ui.disclaimer
 
 import android.content.Context
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -88,5 +89,17 @@ class DisclaimerScreenUiTest {
 
         assertTrue("onAccepted should fire", accepted)
         assertEquals(true, runBlocking { preferencesManager.hasAcceptedDisclaimer.first() })
+    }
+
+    @Test
+    fun rendersTappableSourceLink() {
+        composeRule.setContent {
+            CompositionLocalProvider(LocalAppStrings provides greek) {
+                DisclaimerScreen(preferencesManager = preferencesManager, onAccepted = {})
+            }
+        }
+        composeRule.onNodeWithText("hellenicparliament.gr")
+            .assertIsDisplayed()
+            .assertHasClickAction()
     }
 }

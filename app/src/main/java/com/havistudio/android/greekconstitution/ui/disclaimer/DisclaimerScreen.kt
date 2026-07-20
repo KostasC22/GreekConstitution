@@ -1,5 +1,6 @@
 package com.havistudio.android.greekconstitution.ui.disclaimer
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +16,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.havistudio.android.greekconstitution.data.local.PreferencesManager
 import com.havistudio.android.greekconstitution.ui.strings.LocalAppStrings
+import com.havistudio.android.greekconstitution.util.openCustomTab
 import kotlinx.coroutines.launch
+
+private const val SOURCE_LINK_TEXT = "hellenicparliament.gr"
+private const val SOURCE_LINK_URL = "https://www.hellenicparliament.gr"
 
 @Composable
 fun DisclaimerScreen(
@@ -28,6 +37,8 @@ fun DisclaimerScreen(
 ) {
     val scope = rememberCoroutineScope()
     val strings = LocalAppStrings.current
+    val context = LocalContext.current
+    val customTabColor = MaterialTheme.colorScheme.surface.toArgb()
 
     Column(
         modifier = Modifier
@@ -54,6 +65,19 @@ fun DisclaimerScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = SOURCE_LINK_TEXT,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium,
+                        textDecoration = TextDecoration.Underline,
+                    ),
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.clickable {
+                        openCustomTab(context, SOURCE_LINK_URL, customTabColor)
+                    },
                 )
                 Spacer(Modifier.height(24.dp))
                 Button(
