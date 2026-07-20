@@ -5,7 +5,7 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 
-fun openCustomTab(context: Context, url: String, toolbarColorArgb: Int) {
+internal fun openCustomTab(context: Context, url: String, toolbarColorArgb: Int) {
     val colorParams = CustomTabColorSchemeParams.Builder()
         .setToolbarColor(toolbarColorArgb)
         .build()
