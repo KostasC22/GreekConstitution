@@ -114,10 +114,12 @@ data class AppStrings(
         private val Greek = AppStrings(
             language               = UiLanguage.Greek,
             appTitle               = "Σύνταγμα της Ελλάδας",
-            disclaimerBody         = "Το κείμενο του Συντάγματος που περιέχεται στην εφαρμογή είναι " +
-                "ανεπίσημο και παρέχεται αποκλειστικά για ενημερωτικούς σκοπούς. " +
-                "Για το επίσημο κείμενο, ανατρέξτε στην ιστοσελίδα της Βουλής " +
-                "των Ελλήνων: hellenicparliament.gr",
+            disclaimerBody         = "Η εφαρμογή «Σύνταγμα της Ελλάδας» είναι ανεξάρτητη εφαρμογή " +
+                "τρίτου προγραμματιστή. Δεν αποτελεί επίσημη εφαρμογή, δεν εκπροσωπεί και " +
+                "δεν συνδέεται με τη Βουλή των Ελλήνων, το Ελληνικό Δημόσιο ή οποιονδήποτε " +
+                "άλλο κρατικό φορέα. Το κείμενο του Συντάγματος παρέχεται αποκλειστικά για " +
+                "ενημερωτικούς σκοπούς. Για το επίσημο κείμενο, ανατρέξτε στην ιστοσελίδα " +
+                "της Βουλής των Ελλήνων:",
             accept                 = "Αποδοχή",
 
             home                   = "Αρχική",
@@ -202,10 +204,11 @@ data class AppStrings(
         private val English = AppStrings(
             language               = UiLanguage.English,
             appTitle               = "Constitution of Greece",
-            disclaimerBody         = "The text of the Constitution included in this app is " +
-                "unofficial and provided for informational purposes only. " +
-                "For the official text, refer to the Hellenic Parliament website: " +
-                "hellenicparliament.gr",
+            disclaimerBody         = "The \"Constitution of Greece\" app is an independent, " +
+                "third-party app. It is not an official app of, does not represent, and is " +
+                "not affiliated with the Hellenic Parliament, the Government of Greece, or " +
+                "any other state entity. The Constitution text is provided for informational " +
+                "purposes only. For the official text, visit the Hellenic Parliament website:",
             accept                 = "Accept",
 
             home                   = "Home",
