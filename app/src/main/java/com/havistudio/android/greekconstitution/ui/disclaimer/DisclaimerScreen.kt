@@ -28,7 +28,7 @@ import com.havistudio.android.greekconstitution.util.openCustomTab
 import kotlinx.coroutines.launch
 
 private const val SOURCE_LINK_TEXT = "hellenicparliament.gr"
-private const val SOURCE_LINK_URL = "https://www.hellenicparliament.gr"
+private const val SOURCE_LINK_URL = "https://www.hellenicparliament.gr/Vouli-ton-Ellinon/To-Politevma/Syntagma/"
 
 @Composable
 fun DisclaimerScreen(
